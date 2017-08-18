@@ -32,10 +32,13 @@
 #include <stdlib.h>
 #include <sys/sysinfo.h>
 
-#include "vendor_init.h"
+#include <android-base/properties.h>
+
 #include "property_service.h"
-#include "log.h"
-#include "util.h"
+#include "vendor_init.h"
+
+namespace android {
+namespace init {
 
 char const *heapminfree;
 char const *heapmaxfree;
@@ -92,7 +95,7 @@ void vendor_load_properties()
 {
     std::string platform;
 
-    platform = property_get("ro.board.platform");
+    platform = android::base::GetProperty("ro.board.platform", "");
     if (platform != ANDROID_TARGET)
         return;
 
@@ -107,3 +110,6 @@ void vendor_load_properties()
 
     init_alarm_boot_properties();
 }
+
+}  // namespace init
+}  // namespace android
